@@ -1,2 +1,4 @@
 # GridWorldEnvUtils
-Potpourri of methods useful in designing Gymnasium style gridworld envs. 
+Potpourri of utility methods useful in designing Gymnasium style gridworld envs.
+
+
