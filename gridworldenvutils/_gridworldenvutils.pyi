@@ -6,7 +6,7 @@ import collections.abc
 import numpy
 import numpy.typing
 import typing
-__all__: list[str] = ['check_fov', 'check_line_of_sight', 'find_shortest_path']
+__all__: list[str] = ['check_fov', 'check_line_of_sight', 'find_shortest_path', 'get_visible_cells']
 def check_fov(agent_pos: typing.Annotated[numpy.typing.ArrayLike, numpy.int32, "[2, 1]"], target_pos: typing.Annotated[numpy.typing.ArrayLike, numpy.int32, "[2, 1]"], agent_dir: typing.Annotated[numpy.typing.ArrayLike, numpy.int32, "[2, 1]"], fov_angle: typing.SupportsFloat, fov_distance: typing.SupportsFloat, obstacles: collections.abc.Sequence[collections.abc.Sequence[bool]]) -> bool:
     """
     Check if the target is within the agent's field of view.
@@ -18,4 +18,8 @@ def check_line_of_sight(agent_pos: typing.Annotated[numpy.typing.ArrayLike, nump
 def find_shortest_path(start: typing.Annotated[numpy.typing.ArrayLike, numpy.int32], goal: typing.Annotated[numpy.typing.ArrayLike, numpy.int32], obstacles: collections.abc.Sequence[collections.abc.Sequence[bool]], allow_diagonal: bool = True) -> list[typing.Annotated[numpy.typing.NDArray[numpy.int32], "[2, 1]"]]:
     """
     Find the shortest path from start to goal using A* algorithm.
+    """
+def get_visible_cells(agent_pos: typing.Annotated[numpy.typing.ArrayLike, numpy.int32, "[2, 1]"], agent_dir: typing.Annotated[numpy.typing.ArrayLike, numpy.int32, "[2, 1]"], fov_angle: typing.SupportsFloat, fov_distance: typing.SupportsFloat, obstacles: collections.abc.Sequence[collections.abc.Sequence[bool]]) -> list[typing.Annotated[numpy.typing.NDArray[numpy.int32], "[2, 1]"]]:
+    """
+    Get all visible cells from the agent's position within its field of view.
     """

@@ -3,6 +3,38 @@
 
 namespace gridworld {
 
+    std::vector<Eigen::Vector2i> getVisibleCells(
+        const Eigen::Vector2i& agent_pos,
+        const Eigen::Vector2i& agent_dir,
+        float fov_angle,
+        float fov_distance,
+        const std::vector<std::vector<bool>>& obstacles
+    ) {
+        std::vector<Eigen::Vector2i> visible_cells;
+
+        if (obstacles.empty() || obstacles[0].empty()) {
+            return visible_cells; // Return empty if the map is invalid
+        }
+
+        int num_rows = obstacles.size();
+        int num_cols = obstacles[0].size();
+
+        // Iterate over every cell in the grid
+        for (int r = 0; r < num_rows; ++r) {
+            for (int c = 0; c < num_cols; ++c) {
+                Eigen::Vector2i target_pos(c, r); // Create a target vector for the current cell
+
+                // Use the existing checkFOV function to test visibility
+                if (checkFOV(agent_pos, target_pos, agent_dir, fov_angle, fov_distance, obstacles)) {
+                    visible_cells.push_back(target_pos);
+                }
+            }
+        }
+
+        return visible_cells;
+    }
+
+
     bool checkFOV(const Eigen::Vector2i& agent_pos, const Eigen::Vector2i& target_pos, const Eigen::Vector2i& agent_dir, float fov_angle, float fov_distance, const std::vector<std::vector<bool>>& obstacles) {
 
         Eigen::Vector2i vector_to_target = target_pos - agent_pos;

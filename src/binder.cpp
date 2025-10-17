@@ -19,11 +19,15 @@ PYBIND11_MODULE(_gridworldenvutils, m) {
           py::arg("obstacles"),
           "Check if the target is within the agent's field of view.");
 
-//     m.def("check_line_of_sight", &gridworld::checkLineOfSight, 
-//           py::arg("agent_pos"), 
-//           py::arg("target_pos"), 
-//           py::arg("obstacles"),
-//           "Check if there is a clear line of sight between the agent and the target.");
+
+    m.def("get_visible_cells", &gridworld::getVisibleCells,
+          py::arg("agent_pos"),
+          py::arg("agent_dir"),
+          py::arg("fov_angle"),
+          py::arg("fov_distance"),
+          py::arg("obstacles"),
+          "Get all visible cells from the agent's position within its field of view.");
+
 
 // Use a lambda to wrap checkLineOfSight
     m.def("check_line_of_sight",
@@ -41,13 +45,6 @@ PYBIND11_MODULE(_gridworldenvutils, m) {
         "Check if there is a clear line of sight between the agent and the target.");
 
 
-//     m.def("find_shortest_path", &gridworld::findShortestPath, 
-//           py::arg("start"), 
-//           py::arg("goal"), 
-//           py::arg("obstacles"),
-//           py::arg("allow_diagonal") = true,
-//           "Find the shortest path from start to goal using A* algorithm.");
-// Use a lambda to wrap findShortestPath
     m.def("find_shortest_path",
         [](py::array_t<int> start_py, py::array_t<int> goal_py, const std::vector<std::vector<bool>>& obstacles, bool allow_diagonal) {
             Eigen::Vector2i start(start_py.at(0), start_py.at(1));
