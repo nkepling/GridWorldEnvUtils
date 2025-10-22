@@ -10,7 +10,7 @@ def test_import_cpp_module():
         pytest.fail(f"Failed to import C++ module: {e}")    
 
     try:
-        from gridworldenvutils.los import check_fov, check_line_of_sight    
+        from gridworldenvutils.los import check_fov, check_line_of_sight , get_visible_cells
 
     except ImportError as e:
         pytest.fail(f"Failed to import functions from los.py: {e}")
