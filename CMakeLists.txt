@@ -3,7 +3,7 @@ project(GridWorldEnvUtils LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+cmake_policy(SET CMP0148 NEW)
 
 include(FetchContent)
 
