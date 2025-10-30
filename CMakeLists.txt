@@ -35,7 +35,7 @@ endif()
 
 add_library(gridutils
     src/gridworldenvutils.cpp
-    src/Astar.cpp
+    src/AStar.cpp
 )
 
 target_link_libraries(gridutils PUBLIC Eigen3::Eigen)
