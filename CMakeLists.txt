@@ -38,6 +38,7 @@ add_library(gridutils
     src/AStar.cpp
 )
 
+set_target_properties(gridutils PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(gridutils PUBLIC Eigen3::Eigen)
 
 pybind11_add_module(_gridworldenvutils
