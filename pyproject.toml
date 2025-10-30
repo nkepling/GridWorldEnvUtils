@@ -38,6 +38,6 @@ dev = [
 
 [tool.scikit-build.sdist]
 include = [
-    "src/",
+    "/src",
     "CMakeLists.txt",
 ]
