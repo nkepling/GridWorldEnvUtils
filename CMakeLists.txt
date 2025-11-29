@@ -7,7 +7,7 @@ cmake_policy(SET CMP0148 NEW)
 
 include(FetchContent)
 
-
+find_package(OpenMP REQUIRED)
 find_package(pybind11 QUIET)
 
 if(NOT pybind11_FOUND)
@@ -39,11 +39,27 @@ add_library(gridutils
 )
 
 set_target_properties(gridutils PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(gridutils PUBLIC Eigen3::Eigen)
+
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(gridutils PUBLIC 
+        Eigen3::Eigen 
+        OpenMP::OpenMP_CXX
+        pybind11::module  
+    )
+else()
+    message(WARNING "OpenMP not found. Compiling without parallelization.")
+    target_link_libraries(gridutils PUBLIC 
+        Eigen3::Eigen
+        pybind11::module
+    )
+endif()
+
 
 pybind11_add_module(_gridworldenvutils
     src/binder.cpp
 )
+
 
 target_link_libraries(_gridworldenvutils PRIVATE gridutils)
 

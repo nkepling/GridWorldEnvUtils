@@ -57,6 +57,50 @@ PYBIND11_MODULE(_gridworldenvutils, m) {
         // Pro-tip: py::arg_v automatically adds the default value to the docstring!
         py::arg_v("allow_diagonal", true),
         "Find the shortest path from start to goal using A* algorithm.");
+
+    m.def("run_backward_induction",
+        &gridworld::runBackwardInduction,
+        py::arg("obstacles"),
+        py::arg("evader_path"),
+        py::arg("gamma"),
+        py::arg("stochasticity"),
+        py::arg("fov_angle"),
+        py::arg("fov_distance"),
+        "Runs Time-Dependent Backward Induction to compute the optimal policy table."
+    );
+
+    m.def("run_backward_induction_q", &gridworld::runBackwardInductionQ,
+            py::call_guard<py::gil_scoped_release>(),
+          "Returns Q-values for start state at t=0",
+          py::arg("obstacles"),
+          py::arg("evader_path"),
+          py::arg("gamma"),
+          py::arg("stochasticity"),
+          py::arg("fov_angle"),
+          py::arg("fov_distance"),
+          py::arg("start_r"),
+          py::arg("start_c"),
+          py::arg("start_d"),
+          py::arg("fov_lookahead")
+        );
+
+      m.def("run_batch_backward_induction", &gridworld::runBatchBackwardInduction,
+          py::call_guard<py::gil_scoped_release>(),
+          "Returns Q-values for start state at t=0",
+          py::arg("obstacles"),
+          py::arg("evader_path_batch"),
+          py::arg("weights"),
+          py::arg("gamma"),
+          py::arg("stochasticity"),
+          py::arg("fov_angle"),
+          py::arg("fov_distance"),
+          py::arg("start_r"),
+          py::arg("start_c"),
+          py::arg("start_d"),
+          py::arg("fov_lookahead")
+        );
+
+       
 }
 
 

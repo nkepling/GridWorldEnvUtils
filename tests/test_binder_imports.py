@@ -22,5 +22,11 @@ def test_import_path_finding():
     except ImportError as e:
         pytest.fail(f"Failed to import functions from path_finding.py: {e}")
 
+def test_import_solvers():
+    try:
+        from gridworldenvutils.solvers import run_backward_induction
+    except ImportError as e:
+        pytest.fail(f"Failed to import functions from solvers.py: {e}")
+
 
 
