@@ -18,7 +18,8 @@ def test_backward_induction_runs():
         0.99, # Gamma
         0.1,  # Stochasticity
         1.57, # FOV Angle
-        5.0   # FOV Dist
+        5.0,   # FOV Dist
+        5
     )
     
     # Expect policy table size: T * Rows * Cols * Dirs

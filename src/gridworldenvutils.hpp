@@ -40,16 +40,13 @@ namespace gridworld {
     //     int fov_lookahead
     // );
 
-       std::vector<float> runBackwardInduction(
+       std::vector<int8_t> runBackwardInduction(
     const std::vector<std::vector<bool>>& obstacles,
     const std::vector<Eigen::Vector2i>& evader_path,
     float gamma,
     float stochasticity,
     float fov_angle,
     float fov_distance,
-    int start_r,
-    int start_c,
-    int start_d,
     int fov_lookahead
 );
 

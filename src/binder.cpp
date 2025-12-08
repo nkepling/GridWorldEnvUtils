@@ -66,9 +66,6 @@ PYBIND11_MODULE(_gridworldenvutils, m) {
         py::arg("stochasticity"),
         py::arg("fov_angle"),
         py::arg("fov_distance"),
-        py::arg("start_r"),
-        py::arg("start_c"),
-        py::arg("start_d"),
         py::arg("fov_lookahead"),
         "Runs Time-Dependent Backward Induction to compute the optimal policy table."
     );
