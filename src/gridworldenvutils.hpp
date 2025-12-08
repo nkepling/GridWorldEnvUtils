@@ -30,14 +30,29 @@ namespace gridworld {
     std::vector<Eigen::Vector2i> findShortestPath(const Eigen::Vector2i& start, const Eigen::Vector2i& goal, const std::vector<std::vector<bool>>& obstacles,  bool allow_diagonal);
 
      // --- NEW: Backward Induction Declaration ---
-    std::vector<int8_t> runBackwardInduction(
-        const std::vector<std::vector<bool>>& obstacles,
-        const std::vector<Eigen::Vector2i>& evader_path,
-        float gamma,
-        float stochasticity,
-        float fov_angle,
-        float fov_distance
-    );
+    // std::vector<int8_t> runBackwardInduction(
+    //     const std::vector<std::vector<bool>>& obstacles,
+    //     const std::vector<Eigen::Vector2i>& evader_path,
+    //     float gamma,
+    //     float stochasticity,
+    //     float fov_angle,
+    //     float fov_distance,
+    //     int fov_lookahead
+    // );
+
+       std::vector<float> runBackwardInduction(
+    const std::vector<std::vector<bool>>& obstacles,
+    const std::vector<Eigen::Vector2i>& evader_path,
+    float gamma,
+    float stochasticity,
+    float fov_angle,
+    float fov_distance,
+    int start_r,
+    int start_c,
+    int start_d,
+    int fov_lookahead
+);
+
 
     std::vector<float> runBackwardInductionQ(
     const std::vector<std::vector<bool>>& obstacles,

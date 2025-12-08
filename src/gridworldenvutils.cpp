@@ -320,114 +320,225 @@ namespace gridworld {
     }
 
 
-    //     // Main Backward Induction Function
-    std::vector<int8_t> runBackwardInduction(
-        const std::vector<std::vector<bool>>& obstacles,
-        const std::vector<Eigen::Vector2i>& evader_path,
-        float gamma,
-        float stochasticity,
-        float fov_angle,
-        float fov_distance
-    ) {
-        int rows = obstacles.size();
-        int cols = obstacles[0].size();
-        int num_dirs = 8;
-        int num_actions = 11;
-        int T = evader_path.size();
-        int num_states = rows * cols * num_dirs;
+//   // Main Backward Induction Function (Oracle)
+//      std::vector<int8_t> runBackwardInduction(
+//         const std::vector<std::vector<bool>>& obstacles,
+//         const std::vector<Eigen::Vector2i>& evader_path,
+//         float gamma,
+//         float stochasticity,
+//         float fov_angle,
+//         float fov_distance,
+//         int fov_lookahead
+//     ) {
+//         int rows = obstacles.size();
+//         int cols = obstacles[0].size();
+//         int num_dirs = 8;
+//         int num_actions = 11;
+//         int T = evader_path.size();
+//         int num_states = rows * cols * num_dirs;
 
-        std::vector<Eigen::Vector2i> dir_vecs = {
-            {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}
-        };
+//         std::vector<Eigen::Vector2i> dir_vecs = {
+//             {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}
+//         };
 
-        std::vector<float> V_next(num_states, 0.0f);
-        std::vector<float> V_curr(num_states, 0.0f);
-        std::vector<int8_t> policy_table(T * num_states, 0);
+//         std::vector<float> V_next(num_states, 0.0f);
+//         std::vector<float> V_curr(num_states, 0.0f);
+//         std::vector<int8_t> policy_table(T * num_states, 0);
 
 
 
         
 
-        for (int t = T - 1; t >= 0; --t) {
+//         for (int t = T - 1; t >= 0; --t) {
             
-            int er = evader_path[t].y();
-            int ec = evader_path[t].x();
+//             int er = evader_path[t].y();
+//             int ec = evader_path[t].x();
             
-            int ner = (t < T - 1) ? evader_path[t+1].y() : er;
-            int nec = (t < T - 1) ? evader_path[t+1].x() : ec;
+//             int ner = (t < T - 1) ? evader_path[t+1].y() : er;
+//             int nec = (t < T - 1) ? evader_path[t+1].x() : ec;
             
-            Eigen::Vector2i next_evader_pos(nec, ner);
+//             Eigen::Vector2i next_evader_pos(nec, ner);
 
-            #pragma omp parallel for collapse(2) 
+//             #pragma omp parallel for collapse(2) 
+//             for (int r = 0; r < rows; ++r) {
+//                 for (int c = 0; c < cols; ++c) {
+                    
+//                     if (obstacles[r][c]) continue;
+
+//                     for (int d = 0; d < num_dirs; ++d) {
+                        
+//                         int state_idx = (r * cols + c) * num_dirs + d;
+
+//                         // if (r == er && c == ec) {
+//                         //     V_curr[state_idx] = 0.0f;
+//                         //     policy_table[t * num_states + state_idx] = 0;
+//                         //     continue;
+//                         // }
+
+//                         float max_q = -1e9f;
+//                         int best_a = 0;
+
+//                         for (int a = 0; a < num_actions; ++a) {
+//                             // Get transitions (internal helper)
+//                             std::vector<Transition> outcomes = getTransitions(r, c, d, a, obstacles, stochasticity);
+                            
+//                             float q_val = 0.0f;
+//                             for (const auto& tr : outcomes) {
+//                                 Eigen::Vector2i p_pos(tr.c, tr.r);
+//                                 Eigen::Vector2i p_dir = dir_vecs[tr.d];
+                                
+//                                 bool in_view = checkFOV(p_pos, next_evader_pos, p_dir, fov_angle, fov_distance, obstacles);
+//                                 // bool captured = (tr.r == ner && tr.c == nec);
+//                                 // float reward = 0.0f;
+//                                 float reward = in_view ? 1.0f : 0.0f;
+
+//                                 for (int k = 1; k <= fov_lookahead; ++k) {
+//                                     int target_t = t + k;
+//                                     if (target_t >= T) break;
+
+//                                     Eigen::Vector2i future_evader_pos(evader_path[target_t].x(), evader_path[target_t].y());
+
+//                                     if (checkFOV(p_pos, future_evader_pos, p_dir, fov_angle, fov_distance, obstacles)) {
+//                                         reward += 1.0f;
+//                                     }
+//                                 }
+//                                 // if (captured) reward += 1.0f;
+//                                 float v_future = 0.0f;
+//                                 int next_idx = (tr.r * cols + tr.c) * num_dirs + tr.d;
+//                                 v_future = V_next[next_idx];
+                                
+                           
+//                                 // if (!captured) {
+//                                 //     int next_idx = (tr.r * cols + tr.c) * num_dirs + tr.d;
+//                                 //     v_future = V_next[next_idx];
+//                                 // }
+                                
+//                                 q_val += tr.prob * (reward + gamma * v_future);
+//                             }
+
+//                             if (q_val > max_q) {
+//                                 max_q = q_val;
+//                                 best_a = a;
+//                             }
+//                         }
+
+//                         V_curr[state_idx] = max_q;
+//                         policy_table[t * num_states + state_idx] = (int8_t)best_a;
+//                     }
+//                 }
+//             }
+            
+//             // Update V_next
+//             // Safe copy inside the loop
+//             #pragma omp parallel for
+//             for(int i=0; i<num_states; ++i) V_next[i] = V_curr[i];
+            
+//         }
+//         return policy_table;
+//     }
+
+
+
+    std::vector<float> runBackwardInduction(
+        const std::vector<std::vector<bool>>& obstacles,
+        const std::vector<Eigen::Vector2i>& evader_path,
+        float gamma,
+        float stochasticity,
+        float fov_angle,
+        float fov_distance,
+        int start_r, int start_c, int start_d,
+        int fov_lookahead
+    ) {
+        int rows, cols;
+        std::vector<uint8_t> flat_obstacles = flattenMap(obstacles, rows, cols); // Creates std::vector
+        
+        int num_dirs = 8;
+        int num_actions = 11;
+        int T = evader_path.size();
+        int num_states = rows * cols * num_dirs;
+
+        static const std::vector<Eigen::Vector2i> dir_vecs = {
+            {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}
+        };
+
+        float min_cos = std::cos(fov_angle / 2.0f);
+        float fov_dist_sq = fov_distance * fov_distance;
+
+        std::vector<float> V_curr(num_states, 0.0f);
+        std::vector<float> V_next(num_states, 0.0f);
+        std::vector<float> Reward_Cache(num_states, 0.0f);
+        std::vector<float> start_q_values(num_actions, -1e9f);
+        std::vector<int8_t> policy_table(T * num_states, 0);
+
+
+        for (int t = T - 1; t >= 0; --t) {
+
+            // Step 1: Pre-calc Rewards
+            #pragma omp parallel for collapse(2)
             for (int r = 0; r < rows; ++r) {
                 for (int c = 0; c < cols; ++c) {
-                    
+                    if (flat_obstacles[r * cols + c]) continue;
+
+                    for (int d = 0; d < num_dirs; ++d) {
+                        float vis_score = 0.0f;
+                        Eigen::Vector2i p_pos(c, r);
+                        Eigen::Vector2i p_dir = dir_vecs[d];
+
+                        for (int k = 1; k <= fov_lookahead; ++k) {
+                            int target_t = t + k;
+                            if (target_t >= T) break;
+
+                            Eigen::Vector2i ev_pos(evader_path[target_t].x(), evader_path[target_t].y());
+
+                            // FIX HERE: Use .data() to get the raw pointer
+                            if (checkFOV(p_pos, ev_pos, p_dir, fov_angle, fov_distance, obstacles)) {
+                                vis_score += 1.0f;
+                            }
+                        }
+                        Reward_Cache[(r * cols + c) * num_dirs + d] = vis_score;
+                    }
+                }
+            }
+
+            // Step 2: Bellman
+            #pragma omp parallel for collapse(2)
+            for (int r = 0; r < rows; ++r) {
+                for (int c = 0; c < cols; ++c) {
+                    // if (flat_obstacles[r * cols + c]) continue;
                     if (obstacles[r][c]) continue;
 
                     for (int d = 0; d < num_dirs; ++d) {
-                        
-                        int state_idx = (r * cols + c) * num_dirs + d;
-
-                        // if (r == er && c == ec) {
-                        //     V_curr[state_idx] = 0.0f;
-                        //     policy_table[t * num_states + state_idx] = 0;
-                        //     continue;
-                        // }
-
                         float max_q = -1e9f;
                         int best_a = 0;
-
                         for (int a = 0; a < num_actions; ++a) {
-                            // Get transitions (internal helper)
-                            std::vector<Transition> outcomes = getTransitions(r, c, d, a, obstacles, stochasticity);
+                            // Legacy version uses legacy getTransitionsFlat helper
+                            auto outcomes = getTransitions(r, c, d, a, obstacles, stochasticity);
                             
                             float q_val = 0.0f;
                             for (const auto& tr : outcomes) {
-                                Eigen::Vector2i p_pos(tr.c, tr.r);
-                                Eigen::Vector2i p_dir = dir_vecs[tr.d];
-                                
-                                bool in_view = checkFOV(p_pos, next_evader_pos, p_dir, fov_angle, fov_distance, obstacles);
-                                // bool captured = (tr.r == ner && tr.c == nec);
-                                
-                                float reward = in_view ? 1.0f : 0.0f;
-                                // if (captured) reward += 1.0f;
-                                float v_future = 0.0f;
                                 int next_idx = (tr.r * cols + tr.c) * num_dirs + tr.d;
-                                v_future = V_next[next_idx];
-                                
-                           
-                                // if (!captured) {
-                                //     int next_idx = (tr.r * cols + tr.c) * num_dirs + tr.d;
-                                //     v_future = V_next[next_idx];
-                                // }
-                                
-                                q_val += tr.prob * (reward + gamma * v_future);
+                                q_val += tr.prob * (Reward_Cache[next_idx] + gamma * V_next[next_idx]);
                             }
 
+                            
+
+                            if (t == 0 && r == start_r && c == start_c && d == start_d) {
+                                start_q_values[a] = q_val;
+                            }
                             if (q_val > max_q) {
-                                max_q = q_val;
-                                best_a = a;
-                            }
+                                    max_q = q_val;
+                                    best_a = a;
+                                }
                         }
-
-                        V_curr[state_idx] = max_q;
+                        V_curr[(r * cols + c) * num_dirs + d] = max_q; 
                         policy_table[t * num_states + state_idx] = (int8_t)best_a;
                     }
                 }
             }
-            
-            // Update V_next
-            // Safe copy inside the loop
-            #pragma omp parallel for
-            for(int i=0; i<num_states; ++i) V_next[i] = V_curr[i];
-            
-            if (t % 10 == 0) {
-                 std::cout << "Step " << t << " solved." << std::endl;
-            }
+            std::swap(V_curr, V_next);
         }
-        return policy_table;
+        return start_q_values;
     }
-
 
 
 
@@ -460,6 +571,7 @@ namespace gridworld {
         std::vector<float> V_next(num_states, 0.0f);
         std::vector<float> Reward_Cache(num_states, 0.0f);
         std::vector<float> start_q_values(num_actions, -1e9f);
+
 
         for (int t = T - 1; t >= 0; --t) {
 
