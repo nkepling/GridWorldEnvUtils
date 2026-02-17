@@ -1,1 +1,1 @@
-from ._gridworldenvutils import run_backward_induction,run_backward_induction_q, run_batch_backward_induction
+from ._gridworldenvutils import run_backward_induction,run_backward_induction_q, run_batch_backward_induction,run_backward_induction_with_bias, run_backward_induction_tube

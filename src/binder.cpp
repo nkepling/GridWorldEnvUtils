@@ -101,6 +101,31 @@ PYBIND11_MODULE(_gridworldenvutils, m) {
           py::arg("fov_lookahead")
         );
 
+    m.def("run_backward_induction_with_bias", &gridworld::runBackwardInductionWithBias,
+          py::arg("obstacles"),
+          py::arg("evader_path"),
+          py::arg("gamma"),
+          py::arg("stochasticity"),
+          py::arg("fov_angle"),
+          py::arg("fov_distance"),
+          "Runs the Oracle backward induction with an added centering bias to improve tracking robustness.");
+
+
+    m.def("run_backward_induction_tube", &gridworld::runBackwardInductionTube,
+            py::call_guard<py::gil_scoped_release>(),
+            "Returns Q-values for start state using a Reachability Tube tensor",
+            py::arg("obstacles"),
+            py::arg("reachability_tube"), // Pass flattened numpy uint8 array here
+            py::arg("gamma"),
+            py::arg("stochasticity"),
+            py::arg("fov_angle"),
+            py::arg("fov_distance"),
+            py::arg("start_r"),
+            py::arg("start_c"),
+            py::arg("start_d"),
+            py::arg("fov_lookahead")
+            );
+
        
 }
 

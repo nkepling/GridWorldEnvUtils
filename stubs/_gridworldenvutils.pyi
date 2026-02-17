@@ -2,7 +2,7 @@
 Grid World Environment Utilities Module
 """
 from __future__ import annotations
-import numpy
+import numpyj
 __all__: list[str] = ['check_fov', 'check_line_of_sight', 'find_shortest_path', 'get_visible_cells', 'run_backward_induction']
 def check_fov(agent_pos: numpy.ndarray[numpy.int32[2, 1]], target_pos: numpy.ndarray[numpy.int32[2, 1]], agent_dir: numpy.ndarray[numpy.int32[2, 1]], fov_angle: float, fov_distance: float, obstacles: list[list[bool]]) -> bool:
     """

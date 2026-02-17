@@ -1,21 +1,19 @@
 #pragma once
 
 #include <vector>
-#include <utility> // For std::pair
+#include <utility>
 #include <Eigen/Dense>
 #include <random> 
-#include <optional> // Required for std::optional
-#include <map>      // Fixed: Added for std::map
-#include <vector>   // Fixed: Added for std::vector
-#include <omp.h>    // Fixed: Added for OpenMP
-#include <pybind11/eigen.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/eigen.h>        // For Eigen types
-#include <pybind11/stl.h>          // For STL containers like std::vector
-#include <pybind11/numpy.h>        // For NumPy arrays
-#include "gridworldenvutils.hpp"
+#include <optional> 
+#include <map>     
+#include <omp.h>   
 
-namespace py = pybind11;
+// Note: Pybind includes are technically not needed in the header 
+// if you only use standard types here, but keeping them to match your setup.
+#include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
+#include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 namespace gridworld {
 
@@ -29,46 +27,56 @@ namespace gridworld {
 
     std::vector<Eigen::Vector2i> findShortestPath(const Eigen::Vector2i& start, const Eigen::Vector2i& goal, const std::vector<std::vector<bool>>& obstacles,  bool allow_diagonal);
 
-     // --- NEW: Backward Induction Declaration ---
-    // std::vector<int8_t> runBackwardInduction(
-    //     const std::vector<std::vector<bool>>& obstacles,
-    //     const std::vector<Eigen::Vector2i>& evader_path,
-    //     float gamma,
-    //     float stochasticity,
-    //     float fov_angle,
-    //     float fov_distance,
-    //     int fov_lookahead
-    // );
-
-       std::vector<int8_t> runBackwardInduction(
-    const std::vector<std::vector<bool>>& obstacles,
-    const std::vector<Eigen::Vector2i>& evader_path,
-    float gamma,
-    float stochasticity,
-    float fov_angle,
-    float fov_distance,
-    int fov_lookahead
-);
-
+    std::vector<int8_t> runBackwardInduction(
+        const std::vector<std::vector<bool>>& obstacles,
+        const std::vector<Eigen::Vector2i>& evader_path,
+        float gamma,
+        float stochasticity,
+        float fov_angle,
+        float fov_distance,
+        int fov_lookahead
+    );
 
     std::vector<float> runBackwardInductionQ(
-    const std::vector<std::vector<bool>>& obstacles,
-    const std::vector<Eigen::Vector2i>& evader_path,
-    float gamma,
-    float stochasticity,
-    float fov_angle,
-    float fov_distance,
-    int start_r,
-    int start_c,
-    int start_d,
-    int fov_lookahead
-);
+        const std::vector<std::vector<bool>>& obstacles,
+        const std::vector<Eigen::Vector2i>& evader_path,
+        float gamma,
+        float stochasticity,
+        float fov_angle,
+        float fov_distance,
+        int start_r,
+        int start_c,
+        int start_d,
+        int fov_lookahead
+    );
 
-// --- NEW BATCH SIGNATURE ---
     std::vector<float> runBatchBackwardInduction(
         const std::vector<std::vector<bool>>& obstacles,
         const std::vector<std::vector<Eigen::Vector2i>>& evader_paths_batch,
         const std::vector<float>& weights,
+        float gamma,
+        float stochasticity,
+        float fov_angle,
+        float fov_distance,
+        int start_r, int start_c, int start_d,
+        int fov_lookahead
+    );
+
+    float getCenteringBonus(const Eigen::Vector2i& p_pos, const Eigen::Vector2i& e_pos, const Eigen::Vector2i& p_dir, float fov_angle, float fov_dist);
+
+    std::vector<int8_t> runBackwardInductionWithBias(
+        const std::vector<std::vector<bool>>& obstacles,
+        const std::vector<Eigen::Vector2i>& evader_path,
+        float gamma,
+        float stochasticity,
+        float fov_angle,
+        float fov_distance
+    );
+
+
+    std::vector<float> runBackwardInductionTube(
+        const std::vector<std::vector<bool>>& obstacles,
+        const std::vector<float>& reachability_tube, // Changed to float
         float gamma,
         float stochasticity,
         float fov_angle,
